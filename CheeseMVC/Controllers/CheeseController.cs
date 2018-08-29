@@ -26,9 +26,32 @@ namespace CheeseMVC.Controllers
         }
         [HttpPost]
         [Route("/Cheese/Add")]
-        public IActionResult NewCheese(string name, string description)
+        public IActionResult Add(string name, string description)
         {
+            bool isvalid = new bool();
             // add the new cheese to my existing cheeses
+            if (name == null)
+            {
+                ViewBag.errormsg = "You didn't enter a cheese name!";
+                return View();
+            }
+
+            foreach (char c in name)
+            {
+                if (Char.IsLetter(c) || Char.IsWhiteSpace(c))
+                {
+                    isvalid = true;
+                }
+                else
+                {
+                    isvalid = false;
+                }
+            }
+            if (isvalid == false)
+            {
+                ViewBag.errormsg = "The cheese name should only include letters and spaces!";
+                return View();
+            }
             Cheeses.Add(name, description);
 
             return Redirect("/Cheese");
